@@ -1,140 +1,106 @@
 import type { Metadata } from "next"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { CalendarDateRangePicker } from "@/components/analytics/date-range-picker"
-import { OverviewStats } from "@/components/analytics/overview-stats"
-import { RecentReports } from "@/components/analytics/recent-reports"
-import { TopInsights } from "@/components/analytics/top-insights"
-import { EngagementChart } from "@/components/analytics/engagement-chart"
-import { ComplianceStatusChart } from "@/components/analytics/compliance-status-chart"
-import { LearningProgressChart } from "@/components/analytics/learning-progress-chart"
-import { Download, FileBarChart, Share2 } from "lucide-react"
 
 export const metadata: Metadata = {
   title: "Analytics Dashboard | Deekle.io",
-  description: "Comprehensive analytics and reporting dashboard with AI-powered insights",
+  description: "View and analyze learning metrics and performance data",
 }
 
-export default function AnalyticsDashboardPage() {
+export default function AnalyticsPage() {
   return (
-    <div className="flex flex-col gap-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight">Analytics Dashboard</h1>
-          <p className="text-muted-foreground">Get insights and visualize your learning and compliance data</p>
+    <div className="space-y-6">
+      <div>
+        <h1 className="text-3xl font-bold tracking-tight">Analytics Dashboard</h1>
+        <p className="text-muted-foreground">View and analyze learning metrics and performance data</p>
+      </div>
+
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        {/* Simple stat cards */}
+        <div className="rounded-lg border bg-card text-card-foreground shadow-sm p-6">
+          <div className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <h3 className="tracking-tight text-sm font-medium">Total Users</h3>
+          </div>
+          <div className="text-2xl font-bold">1,234</div>
+          <p className="text-xs text-muted-foreground">+12% from last month</p>
         </div>
-        <div className="flex items-center gap-2">
-          <CalendarDateRangePicker />
-          <Button variant="outline">
-            <Share2 className="mr-2 h-4 w-4" />
-            Share
-          </Button>
-          <Button>
-            <FileBarChart className="mr-2 h-4 w-4" />
-            New Report
-          </Button>
+
+        <div className="rounded-lg border bg-card text-card-foreground shadow-sm p-6">
+          <div className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <h3 className="tracking-tight text-sm font-medium">Active Courses</h3>
+          </div>
+          <div className="text-2xl font-bold">87</div>
+          <p className="text-xs text-muted-foreground">+4 since last month</p>
+        </div>
+
+        <div className="rounded-lg border bg-card text-card-foreground shadow-sm p-6">
+          <div className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <h3 className="tracking-tight text-sm font-medium">Completion Rate</h3>
+          </div>
+          <div className="text-2xl font-bold">76%</div>
+          <p className="text-xs text-muted-foreground">+2% from last month</p>
+        </div>
+
+        <div className="rounded-lg border bg-card text-card-foreground shadow-sm p-6">
+          <div className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <h3 className="tracking-tight text-sm font-medium">Compliance Status</h3>
+          </div>
+          <div className="text-2xl font-bold">92%</div>
+          <p className="text-xs text-muted-foreground">+3% from last month</p>
         </div>
       </div>
 
-      <Tabs defaultValue="overview" className="space-y-4">
-        <TabsList>
-          <TabsTrigger value="overview">Overview</TabsTrigger>
-          <TabsTrigger value="engagement">Engagement</TabsTrigger>
-          <TabsTrigger value="compliance">Compliance</TabsTrigger>
-          <TabsTrigger value="learning">Learning Progress</TabsTrigger>
-        </TabsList>
-
-        <TabsContent value="overview" className="space-y-4">
-          <OverviewStats />
-
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
-            <Card className="lg:col-span-4">
-              <CardHeader>
-                <CardTitle>Engagement Overview</CardTitle>
-                <CardDescription>User activity and engagement metrics over time</CardDescription>
-              </CardHeader>
-              <CardContent className="pl-2">
-                <EngagementChart />
-              </CardContent>
-            </Card>
-
-            <Card className="lg:col-span-3">
-              <CardHeader>
-                <CardTitle>Top AI Insights</CardTitle>
-                <CardDescription>AI-generated insights based on your data</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <TopInsights />
-              </CardContent>
-            </Card>
+      <div className="rounded-lg border bg-card text-card-foreground shadow-sm">
+        <div className="flex flex-col space-y-1.5 p-6">
+          <h3 className="text-lg font-semibold leading-none tracking-tight">Monthly Activity</h3>
+          <p className="text-sm text-muted-foreground">User and course activity over the past 5 months</p>
+        </div>
+        <div className="p-6 pt-0">
+          <div className="h-[300px] flex items-center justify-center bg-muted/50 rounded-md">
+            <p className="text-muted-foreground">Chart visualization would appear here</p>
           </div>
+        </div>
+      </div>
 
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
-            <Card className="lg:col-span-3">
-              <CardHeader>
-                <CardTitle>Compliance Status</CardTitle>
-                <CardDescription>Current compliance metrics across departments</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <ComplianceStatusChart />
-              </CardContent>
-            </Card>
-
-            <Card className="lg:col-span-4">
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <div className="space-y-1">
-                  <CardTitle>Recent Reports</CardTitle>
-                  <CardDescription>Your recently generated reports</CardDescription>
-                </div>
-                <Button variant="outline" size="sm">
-                  <Download className="mr-2 h-4 w-4" />
-                  Export All
-                </Button>
-              </CardHeader>
-              <CardContent>
-                <RecentReports />
-              </CardContent>
-            </Card>
+      <div className="grid gap-4 md:grid-cols-2">
+        <div className="rounded-lg border bg-card text-card-foreground shadow-sm">
+          <div className="flex flex-col space-y-1.5 p-6">
+            <h3 className="text-lg font-semibold leading-none tracking-tight">Top Insights</h3>
+            <p className="text-sm text-muted-foreground">AI-generated insights based on your data</p>
           </div>
-        </TabsContent>
+          <div className="p-6 pt-0">
+            <ul className="space-y-4">
+              <li className="border-b pb-4">
+                <h4 className="font-medium">Increased Engagement</h4>
+                <p className="text-sm text-muted-foreground">
+                  Technical courses have seen a 15% increase in engagement.
+                </p>
+              </li>
+              <li className="border-b pb-4">
+                <h4 className="font-medium">Compliance Training</h4>
+                <p className="text-sm text-muted-foreground">
+                  Compliance training completion rates have decreased by 8%.
+                </p>
+              </li>
+              <li>
+                <h4 className="font-medium">Mobile Learning</h4>
+                <p className="text-sm text-muted-foreground">Mobile device usage for learning has increased by 22%.</p>
+              </li>
+            </ul>
+          </div>
+        </div>
 
-        <TabsContent value="engagement" className="space-y-4">
-          <Card>
-            <CardHeader>
-              <CardTitle>User Engagement Analytics</CardTitle>
-              <CardDescription>Detailed metrics on user activity and engagement</CardDescription>
-            </CardHeader>
-            <CardContent className="pl-2">
-              <EngagementChart detailed />
-            </CardContent>
-          </Card>
-        </TabsContent>
-
-        <TabsContent value="compliance" className="space-y-4">
-          <Card>
-            <CardHeader>
-              <CardTitle>Compliance Analytics</CardTitle>
-              <CardDescription>Detailed compliance status and trends</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <ComplianceStatusChart detailed />
-            </CardContent>
-          </Card>
-        </TabsContent>
-
-        <TabsContent value="learning" className="space-y-4">
-          <Card>
-            <CardHeader>
-              <CardTitle>Learning Progress Analytics</CardTitle>
-              <CardDescription>Detailed metrics on learning progress and achievements</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <LearningProgressChart detailed />
-            </CardContent>
-          </Card>
-        </TabsContent>
-      </Tabs>
+        <div className="rounded-lg border bg-card text-card-foreground shadow-sm">
+          <div className="flex flex-col space-y-1.5 p-6">
+            <h3 className="text-lg font-semibold leading-none tracking-tight">Recent Reports</h3>
+            <p className="text-sm text-muted-foreground">Your recently generated reports</p>
+          </div>
+          <div className="p-6 pt-0">
+            <div className="flex flex-col items-center justify-center h-[200px] text-center">
+              <h3 className="font-medium mb-1">No reports yet</h3>
+              <p className="text-sm text-muted-foreground">Generate your first report to see it here</p>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   )
 }

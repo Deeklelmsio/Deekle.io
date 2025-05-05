@@ -1,34 +1,35 @@
-import { Skeleton } from "@/components/ui/skeleton"
-
-export default function ForecastingLoading() {
+export default function Loading() {
   return (
-    <div className="flex flex-col gap-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <Skeleton className="h-8 w-[200px]" />
-          <Skeleton className="mt-2 h-4 w-[300px]" />
+    <div className="space-y-6">
+      <div>
+        <div className="h-8 w-32 bg-muted rounded-md mb-2"></div>
+        <div className="h-4 w-64 bg-muted rounded-md"></div>
+      </div>
+
+      <div className="rounded-lg border bg-card text-card-foreground shadow-sm">
+        <div className="p-6">
+          <div className="h-5 w-40 bg-muted rounded-md mb-2"></div>
+          <div className="h-4 w-60 bg-muted rounded-md"></div>
         </div>
-        <div className="flex items-center gap-2">
-          <Skeleton className="h-9 w-[100px]" />
-          <Skeleton className="h-9 w-[100px]" />
+        <div className="p-6 pt-0">
+          <div className="h-[300px] bg-muted/50 rounded-md"></div>
         </div>
       </div>
 
-      <div className="space-y-2">
-        <Skeleton className="h-10 w-[300px]" />
-        <Skeleton className="h-[400px] w-full rounded-lg" />
-      </div>
-
-      <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-        <div className="space-y-2">
-          <Skeleton className="h-6 w-[200px]" />
-          <Skeleton className="h-4 w-[250px]" />
-          <Skeleton className="h-[300px] w-full rounded-lg" />
+      <div className="rounded-lg border bg-card text-card-foreground shadow-sm">
+        <div className="p-6">
+          <div className="h-5 w-40 bg-muted rounded-md mb-2"></div>
+          <div className="h-4 w-60 bg-muted rounded-md"></div>
         </div>
-        <div className="space-y-2">
-          <Skeleton className="h-6 w-[200px]" />
-          <Skeleton className="h-4 w-[250px]" />
-          <Skeleton className="h-[300px] w-full rounded-lg" />
+        <div className="p-6 pt-0">
+          <div className="space-y-4">
+            {[...Array(3)].map((_, i) => (
+              <div key={i} className="p-4 border rounded-lg">
+                <div className="h-5 w-48 bg-muted rounded-md mb-2"></div>
+                <div className="h-4 w-full bg-muted rounded-md"></div>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </div>
