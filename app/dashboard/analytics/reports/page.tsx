@@ -1,8 +1,9 @@
+import type { Metadata } from "next"
 import { ReportsPageClient } from "./ReportsPageClient"
 
-export const metadata = {
-  title: "Reports | Analytics Dashboard",
-  description: "Create, save, and schedule custom reports",
+export const metadata: Metadata = {
+  title: "Report Generator | Analytics Dashboard",
+  description: "Generate custom reports with advanced filtering and visualization options",
 }
 
 export default function ReportsPage() {

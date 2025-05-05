@@ -2,247 +2,330 @@
 
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Checkbox } from "@/components/ui/checkbox"
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import { Separator } from "@/components/ui/separator"
-import { CalendarDateRangePicker } from "@/components/analytics/date-range-picker"
-import { BarChart, LineChart, PieChart, Table } from "lucide-react"
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { BarChart, LineChart, PieChart } from "lucide-react"
+
+type ReportType = "users" | "courses" | "compliance" | "engagement"
+type ChartType = "bar" | "line" | "pie" | "table"
 
 export function ReportGenerator() {
-  const [reportType, setReportType] = useState("compliance")
-  const [visualizationType, setVisualizationType] = useState("chart")
-  
+  const [reportType, setReportType] = useState<ReportType>("users")
+  const [chartType, setChartType] = useState<ChartType>("bar")
+  const [dateRange, setDateRange] = useState("last30days")
+  const [isGenerating, setIsGenerating] = useState(false)
+
+  const handleGenerateReport = () => {
+    setIsGenerating(true)
+    // Simulate report generation
+    setTimeout(() => {
+      setIsGenerating(false)
+    }, 1500)
+  }
+
   return (
     <div className="space-y-6">
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="report-name">Report Name</Label>
-            <Input id="report-name" placeholder="Enter report name" />
-          </div>
-          
-          <div className="space-y-2">
-            <Label htmlFor="report-type">Report Type</Label>
-            <Select value={reportType} onValueChange={setReportType}>
-              <SelectTrigger id="report-type">
-                <SelectValue placeholder="Select report type" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="compliance">Compliance Report</SelectItem>
-                <SelectItem value="engagement">User Engagement Report</SelectItem>
-                <SelectItem value="learning">Learning Progress Report</SelectItem>
-                <SelectItem value="performance">Performance Report</SelectItem>
-                <SelectItem value="custom">Custom Report</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-          
-          <div className="space-y-2">
-            <Label>Date Range</Label>
-            <CalendarDateRangePicker className="w-full" />
-          </div>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div>
+          <label className="text-sm font-medium mb-2 block">Report Type</label>
+          <Select value={reportType} onValueChange={(value: ReportType) => setReportType(value)}>
+            <SelectTrigger>
+              <SelectValue placeholder="Select report type" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="users">User Activity</SelectItem>
+              <SelectItem value="courses">Course Completion</SelectItem>
+              <SelectItem value="compliance">Compliance Status</SelectItem>
+              <SelectItem value="engagement">Engagement Metrics</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
-        
-        <div className="space-y-4">
-          <div className="space-y-2">
-            <Label>Data Sources</Label>
-            <div className="space-y-2">
-              <div className="flex items-center space-x-2">
-                <Checkbox id="source-users" defaultChecked />
-                <label
-                  htmlFor="source-users"
-                  className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                >
-                  User Data
-                </label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Checkbox id="source-courses" defaultChecked />
-                <label
-                  htmlFor="source-courses"
-                  className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                >
-                  Course Data
-                </label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Checkbox id="source-compliance" defaultChecked />
-                <label
-                  htmlFor="source-compliance"
-                  className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                >
-                  Compliance Data
-                </label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Checkbox id="source-assessments" />
-                <label
-                  htmlFor="source-assessments"
-                  className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                >
-                  Assessment Data
-                </label>
-              </div>
-            </div>
-          </div>
-          
-          <div className="space-y-2">
-            <Label>Filters</Label>
-            <div className="space-y-2">
-              <div className="grid grid-cols-2 gap-2">
-                <Select>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Department" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All Departments</SelectItem>
-                    <SelectItem value="engineering">Engineering</SelectItem>
-                    <SelectItem value="marketing">Marketing</SelectItem>
-                    <SelectItem value="sales">Sales</SelectItem>
-                    <SelectItem value="hr">HR</SelectItem>
-                    <SelectItem value="finance">Finance</SelectItem>
-                  </SelectContent>
-                </Select>
-                
-                <Select>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Status" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All Statuses</SelectItem>
-                    <SelectItem value="completed">Completed</SelectItem>
-                    <SelectItem value="in-progress">In Progress</SelectItem>
-                    <SelectItem value="not-started">Not Started</SelectItem>
-                    <SelectItem value="overdue">Overdue</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              
-              <div className="grid grid-cols-2 gap-2">
-                <Select>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Course Type" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All Types</SelectItem>
-                    <SelectItem value="compliance">Compliance</SelectItem>
-                    <SelectItem value="skills">Skills Development</SelectItem>
-                    <SelectItem value="onboarding">Onboarding</SelectItem>
-                    <SelectItem value="certification">Certification</SelectItem>
-                  </SelectContent>
-                </Select>
-                
-                <Select>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Completion" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All Completion Rates</SelectItem>
-                    <SelectItem value="high">High (>80%)</SelectItem>
-                    <SelectItem value="medium">Medium (50-80%)</SelectItem>
-                    <SelectItem value="low">Low (<50%)</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-            </div>
-          </div>
+
+        <div>
+          <label className="text-sm font-medium mb-2 block">Date Range</label>
+          <Select value={dateRange} onValueChange={setDateRange}>
+            <SelectTrigger>
+              <SelectValue placeholder="Select date range" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="last7days">Last 7 Days</SelectItem>
+              <SelectItem value="last30days">Last 30 Days</SelectItem>
+              <SelectItem value="last90days">Last 90 Days</SelectItem>
+              <SelectItem value="lastYear">Last Year</SelectItem>
+              <SelectItem value="custom">Custom Range</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
-        
-        <div className="space-y-4">
-          <div className="space-y-2">
-            <Label>Visualization Type</Label>
-            <RadioGroup defaultValue="chart" value={visualizationType} onValueChange={setVisualizationType}>
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem value="chart" id="viz-chart" />
-                <Label htmlFor="viz-chart" className="flex items-center">
-                  <BarChart className="h-4 w-4 mr-2" />
-                  Charts & Graphs
-                </Label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem value="table" id="viz-table" />
-                <Label htmlFor="viz-table" className="flex items-center">
-                  <Table className="h-4 w-4 mr-2" />
-                  Data Tables
-                </Label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem value="both" id="viz-both" />
-                <Label htmlFor="viz-both">Both</Label>
-              </div>
-            </RadioGroup>
-          </div>
-          
-          {visualizationType !== "table" && (
-            <div className="space-y-2">
-              <Label>Chart Type</Label>
-              <div className="grid grid-cols-2 gap-2">
-                <Button variant="outline" className="flex flex-col items-center justify-center h-20 p-2">
-                  <BarChart className="h-8 w-8 mb-1" />
-                  <span className="text-xs">Bar Chart</span>
-                </Button>
-                <Button variant="outline" className="flex flex-col items-center justify-center h-20 p-2">
-                  <LineChart className="h-8 w-8 mb-1" />
-                  <span className="text-xs">Line Chart</span>
-                </Button>
-                <Button variant="outline" className="flex flex-col items-center justify-center h-20 p-2">
-                  <PieChart className="h-8 w-8 mb-1" />
-                  <span className="text-xs">Pie Chart</span>
-                </Button>
-                <Button variant="outline" className="flex flex-col items-center justify-center h-20 p-2">
-                  <BarChart className="h-8 w-8 mb-1 rotate-90" />
-                  <span className="text-xs">Horizontal Bar</span>
-                </Button>
-              </div>
-            </div>
-          )}
-          
-          <div className="space-y-2">
-            <Label>Export Format</Label>
-            <Select defaultValue="pdf">
-              <SelectTrigger>
-                <SelectValue placeholder="Select format" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="pdf">PDF Document</SelectItem>
-                <SelectItem value="excel">Excel Spreadsheet</SelectItem>
-                <SelectItem value="csv">CSV File</SelectItem>
-                <SelectItem value="image">Image (PNG)</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
+
+        <div>
+          <label className="text-sm font-medium mb-2 block">Visualization Type</label>
+          <Tabs value={chartType} onValueChange={(value: ChartType) => setChartType(value)}>
+            <TabsList className="grid grid-cols-4 w-full">
+              <TabsTrigger value="bar" className="flex items-center gap-1">
+                <BarChart className="h-4 w-4" />
+                <span className="sr-only sm:not-sr-only sm:inline-block">Bar</span>
+              </TabsTrigger>
+              <TabsTrigger value="line" className="flex items-center gap-1">
+                <LineChart className="h-4 w-4" />
+                <span className="sr-only sm:not-sr-only sm:inline-block">Line</span>
+              </TabsTrigger>
+              <TabsTrigger value="pie" className="flex items-center gap-1">
+                <PieChart className="h-4 w-4" />
+                <span className="sr-only sm:not-sr-only sm:inline-block">Pie</span>
+              </TabsTrigger>
+              <TabsTrigger value="table" className="flex items-center gap-1">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="15"
+                  height="15"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="h-4 w-4"
+                >
+                  <path d="M3 3h18v18H3zM3 9h18M3 15h18M9 3v18M15 3v18" />
+                </svg>
+                <span className="sr-only sm:not-sr-only sm:inline-block">Table</span>
+              </TabsTrigger>
+            </TabsList>
+          </Tabs>
         </div>
       </div>
-      
-      <Separator />
-      
+
       <div className="space-y-4">
-        <h3 className="text-lg font-medium">Report Preview</h3>
-        <Card>
-          <CardContent className="p-6">
-            <div className="flex items-center justify-center p-12 border-2 border-dashed rounded-lg">
-              <div className="text-center">
-                <BarChart className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
-                <h3 className="text-lg font-medium mb-2">Report Preview</h3>
-                <p className="text-sm text-muted-foreground mb-4">
-                  Configure your report options above to generate a preview
-                </p>
-                <Button>Generate Preview</Button>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-sm">Filters</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                {reportType === "users" && (
+                  <>
+                    <div>
+                      <label className="text-sm font-medium mb-2 block">User Groups</label>
+                      <Select defaultValue="all">
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select user groups" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="all">All Users</SelectItem>
+                          <SelectItem value="active">Active Users</SelectItem>
+                          <SelectItem value="inactive">Inactive Users</SelectItem>
+                          <SelectItem value="new">New Users</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div>
+                      <label className="text-sm font-medium mb-2 block">Activity Type</label>
+                      <Select defaultValue="all">
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select activity type" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="all">All Activities</SelectItem>
+                          <SelectItem value="logins">Logins</SelectItem>
+                          <SelectItem value="course-views">Course Views</SelectItem>
+                          <SelectItem value="completions">Completions</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </>
+                )}
+
+                {reportType === "courses" && (
+                  <>
+                    <div>
+                      <label className="text-sm font-medium mb-2 block">Course Category</label>
+                      <Select defaultValue="all">
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select course category" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="all">All Categories</SelectItem>
+                          <SelectItem value="compliance">Compliance</SelectItem>
+                          <SelectItem value="skills">Skills Development</SelectItem>
+                          <SelectItem value="onboarding">Onboarding</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div>
+                      <label className="text-sm font-medium mb-2 block">Completion Status</label>
+                      <Select defaultValue="all">
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select completion status" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="all">All Statuses</SelectItem>
+                          <SelectItem value="completed">Completed</SelectItem>
+                          <SelectItem value="in-progress">In Progress</SelectItem>
+                          <SelectItem value="not-started">Not Started</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </>
+                )}
+
+                {reportType === "compliance" && (
+                  <>
+                    <div>
+                      <label className="text-sm font-medium mb-2 block">Compliance Type</label>
+                      <Select defaultValue="all">
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select compliance type" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="all">All Types</SelectItem>
+                          <SelectItem value="required">Required Training</SelectItem>
+                          <SelectItem value="certifications">Certifications</SelectItem>
+                          <SelectItem value="regulatory">Regulatory</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div>
+                      <label className="text-sm font-medium mb-2 block">Status</label>
+                      <Select defaultValue="all">
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select status" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="all">All Statuses</SelectItem>
+                          <SelectItem value="compliant">Compliant</SelectItem>
+                          <SelectItem value="non-compliant">Non-Compliant</SelectItem>
+                          <SelectItem value="expiring">Expiring Soon</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </>
+                )}
+
+                {reportType === "engagement" && (
+                  <>
+                    <div>
+                      <label className="text-sm font-medium mb-2 block">Engagement Metric</label>
+                      <Select defaultValue="all">
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select engagement metric" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="all">All Metrics</SelectItem>
+                          <SelectItem value="time-spent">Time Spent</SelectItem>
+                          <SelectItem value="interactions">Interactions</SelectItem>
+                          <SelectItem value="completion-rate">Completion Rate</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div>
+                      <label className="text-sm font-medium mb-2 block">Content Type</label>
+                      <Select defaultValue="all">
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select content type" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="all">All Content</SelectItem>
+                          <SelectItem value="courses">Courses</SelectItem>
+                          <SelectItem value="videos">Videos</SelectItem>
+                          <SelectItem value="assessments">Assessments</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </>
+                )}
+
+                <div>
+                  <label className="text-sm font-medium mb-2 block">Additional Filters</label>
+                  <Input placeholder="Search by keyword" />
+                </div>
               </div>
-            </div>
-          </CardContent>
-        </Card>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-sm">Report Options</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                <div>
+                  <label className="text-sm font-medium mb-2 block">Report Name</label>
+                  <Input placeholder="Enter report name" />
+                </div>
+                <div>
+                  <label className="text-sm font-medium mb-2 block">Group By</label>
+                  <Select defaultValue="day">
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select grouping" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="day">Day</SelectItem>
+                      <SelectItem value="week">Week</SelectItem>
+                      <SelectItem value="month">Month</SelectItem>
+                      <SelectItem value="quarter">Quarter</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div>
+                  <label className="text-sm font-medium mb-2 block">Include in Report</label>
+                  <div className="grid grid-cols-2 gap-2">
+                    <div className="flex items-center space-x-2">
+                      <input type="checkbox" id="summary" className="rounded border-gray-300" defaultChecked />
+                      <label htmlFor="summary" className="text-sm">
+                        Summary
+                      </label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <input type="checkbox" id="details" className="rounded border-gray-300" defaultChecked />
+                      <label htmlFor="details" className="text-sm">
+                        Details
+                      </label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <input type="checkbox" id="charts" className="rounded border-gray-300" defaultChecked />
+                      <label htmlFor="charts" className="text-sm">
+                        Charts
+                      </label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <input type="checkbox" id="recommendations" className="rounded border-gray-300" defaultChecked />
+                      <label htmlFor="recommendations" className="text-sm">
+                        AI Recommendations
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        <div className="flex justify-end space-x-2">
+          <Button variant="outline">Save Settings</Button>
+          <Button onClick={handleGenerateReport} disabled={isGenerating}>
+            {isGenerating ? "Generating..." : "Generate Report"}
+          </Button>
+        </div>
       </div>
-      
-      <div className="flex justify-end gap-2">
-        <Button variant="outline">Save as Template</Button>
-        <Button variant="outline">Schedule Report</Button>
-        <Button>Generate Report</Button>
-      </div>
+
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-sm">Preview</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="h-[300px] flex items-center justify-center border border-dashed rounded-lg">
+            <p className="text-muted-foreground">Configure your report and click "Generate Report" to see a preview</p>
+          </div>
+        </CardContent>
+      </Card>
     </div>
   )
+}
+
+// Also export CustomReportGenerator for backward compatibility
+export function CustomReportGenerator() {
+  return <ReportGenerator />
 }

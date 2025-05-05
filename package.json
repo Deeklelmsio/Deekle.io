@@ -61,9 +61,7 @@
     "prisma": "latest",
     "ai": "latest",
     "@ai-sdk/openai": "latest",
-    "@prisma/client": "latest",
-    "@clerk/nextjs": "latest",
-    "react-hot-toast": "latest"
+    "@prisma/client": "latest"
   },
   "devDependencies": {
     "@types/node": "^22",
