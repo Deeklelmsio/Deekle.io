@@ -1,17 +1,5 @@
-// Database connection and utility functions
-import { PrismaClient } from "@prisma/client"
-
-// For development, we'll use a singleton pattern to avoid too many connections
-let prisma: PrismaClient
-
-if (process.env.NODE_ENV === "production") {
-  prisma = new PrismaClient()
-} else {
-  if (!global.prisma) {
-    global.prisma = new PrismaClient()
-  }
-  prisma = global.prisma
-}
+// Mock database utility for development
+// In a production environment, this would be replaced with a real database connection
 
 // Mock data for development
 export const mockAnalyticsData = {
@@ -160,4 +148,40 @@ export async function saveReport(report: {
   }
 }
 
-export default prisma
+// Mock user data
+export const users = [
+  { id: 1, name: "User 1", email: "user1@example.com" },
+  { id: 2, name: "User 2", email: "user2@example.com" },
+]
+
+// Mock course data
+export const courses = [
+  { id: 1, title: "Course 1", description: "Description 1" },
+  { id: 2, title: "Course 2", description: "Description 2" },
+]
+
+// Mock report data
+export const reports = [
+  { id: 1, name: "Report 1", type: "users", createdAt: new Date() },
+  { id: 2, name: "Report 2", type: "courses", createdAt: new Date() },
+]
+
+// Mock database client with methods that return the mock data
+export const prisma = {
+  user: {
+    findMany: async () => users,
+  },
+  course: {
+    findMany: async () => courses,
+  },
+  report: {
+    findMany: async () => reports,
+  },
+}
+
+export default {
+  getAnalyticsData,
+  generateReport,
+  saveReport,
+  prisma,
+}
