@@ -1,16 +1,13 @@
 "use client"
 
-import { useEffect, useState } from "react"
-import { Cell, Legend, Pie, PieChart, ResponsiveContainer, Tooltip } from "recharts"
+import { Tooltip } from "@/components/ui/tooltip"
+
+import { useState, useEffect } from "react"
+import { ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
+import { PieChart, Pie, ResponsiveContainer, Cell, Legend } from "recharts"
 import { Badge } from "@/components/ui/badge"
 import { Progress } from "@/components/ui/progress"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-
-const data = [
-  { name: "Compliant", value: 68, color: "#4ade80" },
-  { name: "In Progress", value: 22, color: "#facc15" },
-  { name: "Non-Compliant", value: 10, color: "#f87171" },
-]
 
 const departmentData = [
   {
@@ -60,15 +57,38 @@ const departmentData = [
   },
 ]
 
+// Mock data - in a real app, this would come from an API
+const mockData = [
+  { name: "Compliant", value: 65, color: "hsl(var(--success))" },
+  { name: "In Progress", value: 25, color: "hsl(var(--warning))" },
+  { name: "Non-Compliant", value: 10, color: "hsl(var(--destructive))" },
+]
+
 export function ComplianceStatusChart({ detailed = false }) {
-  const [isMounted, setIsMounted] = useState(false)
+  const [data, setData] = useState([])
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    setIsMounted(true)
+    // Simulate API fetch
+    const fetchData = async () => {
+      setLoading(true)
+      // In a real app, this would be an API call
+      await new Promise((resolve) => setTimeout(resolve, 700))
+      setData(mockData)
+      setLoading(false)
+    }
+
+    fetchData()
   }, [])
 
-  if (!isMounted) {
-    return <div className="h-[300px] flex items-center justify-center">Loading chart...</div>
+  if (loading) {
+    return (
+      <div
+        className={`w-full ${detailed ? "h-[400px]" : "h-[300px]"} bg-muted/50 animate-pulse rounded-md flex items-center justify-center`}
+      >
+        <p className="text-muted-foreground">Loading chart data...</p>
+      </div>
+    )
   }
 
   if (detailed) {
@@ -242,7 +262,7 @@ export function ComplianceStatusChart({ detailed = false }) {
   }
 
   return (
-    <div className="h-[300px]">
+    <div className={`w-full ${detailed ? "h-[400px]" : "h-[300px]"}`}>
       <ResponsiveContainer width="100%" height="100%">
         <PieChart>
           <Pie
@@ -250,17 +270,17 @@ export function ComplianceStatusChart({ detailed = false }) {
             cx="50%"
             cy="50%"
             labelLine={false}
-            outerRadius={80}
+            outerRadius={detailed ? 150 : 100}
             fill="#8884d8"
             dataKey="value"
-            label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+            label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
           >
             {data.map((entry, index) => (
               <Cell key={`cell-${index}`} fill={entry.color} />
             ))}
           </Pie>
-          <Tooltip />
           <Legend />
+          <ChartTooltip content={<ChartTooltipContent />} />
         </PieChart>
       </ResponsiveContainer>
     </div>
