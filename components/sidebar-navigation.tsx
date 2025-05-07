@@ -49,6 +49,11 @@ export function SidebarNavigation() {
         { name: "Compliance Training", href: "/dashboard/compliance", icon: <Shield className="h-5 w-5" /> },
         { name: "AI Tutor", href: "/ai-tutor", icon: <Brain className="h-5 w-5" /> },
         { name: "AI Demo", href: "/ai-demo", icon: <Sparkles className="h-5 w-5" /> },
+        {
+          name: "ML Features",
+          href: "/dashboard/ml-features",
+          icon: <Brain className="h-5 w-5" />,
+        },
       ],
     },
     {
