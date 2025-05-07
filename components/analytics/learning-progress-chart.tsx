@@ -1,69 +1,72 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useAnalytics } from "@/contexts/analytics-context"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Skeleton } from "@/components/ui/skeleton"
+import { Cell, Pie, PieChart, ResponsiveContainer } from "recharts"
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
-import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis, CartesianGrid, Legend } from "recharts"
 
-// Mock data - in a real app, this would come from an API
-const mockData = [
-  { name: "Technical", completed: 85, inProgress: 15 },
-  { name: "Compliance", completed: 92, inProgress: 8 },
-  { name: "Soft Skills", completed: 70, inProgress: 30 },
-  { name: "Leadership", completed: 65, inProgress: 35 },
-  { name: "Onboarding", completed: 95, inProgress: 5 },
-]
+export function LearningProgressChart() {
+  const { learningProgressData, isLoading } = useAnalytics()
 
-export function LearningProgressChart({ detailed = false }) {
-  const [data, setData] = useState([])
-  const [loading, setLoading] = useState(true)
-
-  useEffect(() => {
-    // Simulate API fetch
-    const fetchData = async () => {
-      setLoading(true)
-      // In a real app, this would be an API call
-      await new Promise((resolve) => setTimeout(resolve, 600))
-      setData(mockData)
-      setLoading(false)
-    }
-
-    fetchData()
-  }, [])
-
-  if (loading) {
+  if (isLoading) {
     return (
-      <div
-        className={`w-full ${detailed ? "h-[400px]" : "h-[300px]"} bg-muted/50 animate-pulse rounded-md flex items-center justify-center`}
-      >
-        <p className="text-muted-foreground">Loading chart data...</p>
-      </div>
+      <Card>
+        <CardHeader>
+          <CardTitle>
+            <Skeleton className="h-6 w-[180px]" />
+          </CardTitle>
+          <CardDescription>
+            <Skeleton className="h-4 w-[250px]" />
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="flex justify-center">
+          <Skeleton className="h-[200px] w-[200px] rounded-full" />
+        </CardContent>
+      </Card>
     )
   }
 
+  const COLORS = ["#2196F3", "#9C27B0", "#FF9800"]
+
   return (
-    <ChartContainer
-      config={{
-        completed: {
-          label: "Completed",
-          color: "hsl(var(--chart-1))",
-        },
-        inProgress: {
-          label: "In Progress",
-          color: "hsl(var(--chart-2))",
-        },
-      }}
-    >
-      <ResponsiveContainer width="100%" height={detailed ? 400 : 300}>
-        <BarChart data={data} margin={{ top: 5, right: 10, left: 10, bottom: 5 }}>
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="name" />
-          <YAxis />
-          <ChartTooltip content={<ChartTooltipContent />} />
-          <Legend />
-          <Bar dataKey="completed" fill="var(--color-completed)" stackId="a" />
-          <Bar dataKey="inProgress" fill="var(--color-inProgress)" stackId="a" />
-        </BarChart>
-      </ResponsiveContainer>
-    </ChartContainer>
+    <Card>
+      <CardHeader>
+        <CardTitle>Learning Progress</CardTitle>
+        <CardDescription>Course completion status</CardDescription>
+      </CardHeader>
+      <CardContent className="flex justify-center">
+        <ChartContainer
+          config={{
+            progress: {
+              label: "Progress",
+              color: "hsl(var(--chart-2))",
+            },
+          }}
+          className="h-[250px] w-[250px]"
+        >
+          <ResponsiveContainer width="100%" height="100%">
+            <PieChart>
+              <Pie
+                data={learningProgressData}
+                cx="50%"
+                cy="50%"
+                labelLine={false}
+                outerRadius={80}
+                fill="#8884d8"
+                dataKey="value"
+                nameKey="name"
+                label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
+              >
+                {learningProgressData.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                ))}
+              </Pie>
+              <ChartTooltip content={<ChartTooltipContent />} />
+            </PieChart>
+          </ResponsiveContainer>
+        </ChartContainer>
+      </CardContent>
+    </Card>
   )
 }

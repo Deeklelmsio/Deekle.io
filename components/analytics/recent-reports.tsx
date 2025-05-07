@@ -1,93 +1,73 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useAnalytics } from "@/contexts/analytics-context"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Skeleton } from "@/components/ui/skeleton"
+import { FileText, Download, Eye } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { FileText, Download } from "lucide-react"
-
-// Mock data - in a real app, this would come from an API
-const mockReports = [
-  {
-    id: 1,
-    name: "Monthly User Activity",
-    date: "May 3, 2025",
-    type: "User Activity",
-  },
-  {
-    id: 2,
-    name: "Compliance Status Overview",
-    date: "May 2, 2025",
-    type: "Compliance",
-  },
-  {
-    id: 3,
-    name: "Course Completion Trends",
-    date: "Apr 30, 2025",
-    type: "Course Completion",
-  },
-]
 
 export function RecentReports() {
-  const [reports, setReports] = useState([])
-  const [loading, setLoading] = useState(true)
+  const { reportsData, isLoading } = useAnalytics()
 
-  useEffect(() => {
-    // Simulate API fetch
-    const fetchData = async () => {
-      setLoading(true)
-      // In a real app, this would be an API call
-      await new Promise((resolve) => setTimeout(resolve, 800))
-      setReports(mockReports)
-      setLoading(false)
-    }
-
-    fetchData()
-  }, [])
-
-  if (loading) {
+  if (isLoading) {
     return (
-      <div className="space-y-4">
-        {[1, 2, 3].map((i) => (
-          <div key={i} className="flex gap-3 animate-pulse">
-            <div className="w-8 h-8 rounded-full bg-muted"></div>
-            <div className="flex-1 space-y-2">
-              <div className="h-4 bg-muted rounded w-1/2"></div>
-              <div className="h-3 bg-muted rounded w-1/3"></div>
-            </div>
+      <Card>
+        <CardHeader>
+          <CardTitle>
+            <Skeleton className="h-6 w-[150px]" />
+          </CardTitle>
+          <CardDescription>
+            <Skeleton className="h-4 w-[200px]" />
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-4">
+            {Array.from({ length: 3 }).map((_, i) => (
+              <div key={i} className="flex items-center space-x-4">
+                <Skeleton className="h-10 w-10 rounded-full" />
+                <div className="space-y-1 flex-1">
+                  <Skeleton className="h-5 w-[200px]" />
+                  <Skeleton className="h-4 w-[150px]" />
+                </div>
+                <Skeleton className="h-8 w-8 rounded-full" />
+                <Skeleton className="h-8 w-8 rounded-full" />
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
-    )
-  }
-
-  if (reports.length === 0) {
-    return (
-      <div className="flex flex-col items-center justify-center h-[200px] text-center">
-        <FileText className="h-8 w-8 text-muted-foreground mb-2" />
-        <h3 className="font-medium mb-1">No reports yet</h3>
-        <p className="text-sm text-muted-foreground">Generate your first report to see it here</p>
-        <Button className="mt-4">Generate Report</Button>
-      </div>
+        </CardContent>
+      </Card>
     )
   }
 
   return (
-    <div className="space-y-4">
-      {reports.map((report) => (
-        <div key={report.id} className="flex items-start gap-3">
-          <div className="p-2 rounded-full bg-muted">
-            <FileText className="h-4 w-4" />
-          </div>
-          <div className="flex-1">
-            <h4 className="font-medium">{report.name}</h4>
-            <p className="text-xs text-muted-foreground">
-              {report.type} • {report.date}
-            </p>
-          </div>
-          <Button variant="ghost" size="icon">
-            <Download className="h-4 w-4" />
-          </Button>
+    <Card>
+      <CardHeader>
+        <CardTitle>Recent Reports</CardTitle>
+        <CardDescription>Recently generated analytics reports</CardDescription>
+      </CardHeader>
+      <CardContent>
+        <div className="space-y-4">
+          {reportsData.slice(0, 3).map((report) => (
+            <div key={report.id} className="flex items-center space-x-4">
+              <FileText className="h-10 w-10 text-blue-500" />
+              <div className="space-y-1 flex-1">
+                <h4 className="text-sm font-medium leading-none">{report.title}</h4>
+                <p className="text-xs text-muted-foreground">
+                  {new Date(report.date).toLocaleDateString()} by {report.author}
+                </p>
+              </div>
+              <Button size="icon" variant="ghost">
+                <Eye className="h-4 w-4" />
+                <span className="sr-only">View</span>
+              </Button>
+              <Button size="icon" variant="ghost">
+                <Download className="h-4 w-4" />
+                <span className="sr-only">Download</span>
+              </Button>
+            </div>
+          ))}
         </div>
-      ))}
-    </div>
+      </CardContent>
+    </Card>
   )
 }

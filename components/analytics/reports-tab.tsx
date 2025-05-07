@@ -1,29 +1,20 @@
 "use client"
-
-import { useState } from "react"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { ReportGenerator } from "./report-generator"
-import { SavedReports } from "./saved-reports"
+import { DateRangePicker } from "@/components/analytics/date-range-picker"
+import { ReportGenerator } from "@/components/analytics/report-generator"
+import { SavedReports } from "@/components/analytics/saved-reports"
 
 export function ReportsTab() {
-  const [activeTab, setActiveTab] = useState("generate")
-
   return (
-    <Tabs defaultValue="generate" value={activeTab} onValueChange={setActiveTab}>
-      <TabsList className="grid w-full grid-cols-2">
-        <TabsTrigger value="generate">Generate Report</TabsTrigger>
-        <TabsTrigger value="saved">Saved Reports</TabsTrigger>
-      </TabsList>
-      <TabsContent value="generate">
-        <div className="py-6">
-          <ReportGenerator />
-        </div>
-      </TabsContent>
-      <TabsContent value="saved">
-        <div className="py-6">
-          <SavedReports />
-        </div>
-      </TabsContent>
-    </Tabs>
+    <div className="space-y-6 p-6">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        <h1 className="text-3xl font-bold tracking-tight">Reports</h1>
+        <DateRangePicker />
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <ReportGenerator />
+        <SavedReports />
+      </div>
+    </div>
   )
 }

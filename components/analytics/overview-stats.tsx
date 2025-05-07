@@ -1,105 +1,75 @@
 "use client"
 
-import { useState, useEffect } from "react"
-import { Card, CardContent } from "@/components/ui/card"
-import { ArrowDown, ArrowUp, Users, BookOpen, Award, ShieldCheck } from "lucide-react"
-
-// Mock data - in a real app, this would come from an API
-const mockStats = {
-  totalUsers: 1234,
-  activeCourses: 87,
-  completionRate: 76,
-  complianceStatus: 92,
-  trends: {
-    totalUsers: 12,
-    activeCourses: 4,
-    completionRate: 2,
-    complianceStatus: 3,
-  },
-}
+import { useAnalytics } from "@/contexts/analytics-context"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Skeleton } from "@/components/ui/skeleton"
+import { Users, Award, BarChart } from "lucide-react"
 
 export function OverviewStats() {
-  const [stats, setStats] = useState(mockStats)
-  const [loading, setLoading] = useState(true)
+  const { overviewData, isLoading } = useAnalytics()
 
-  useEffect(() => {
-    // Simulate API fetch
-    const fetchData = async () => {
-      setLoading(true)
-      // In a real app, this would be an API call
-      await new Promise((resolve) => setTimeout(resolve, 500))
-      setStats(mockStats)
-      setLoading(false)
-    }
+  if (isLoading) {
+    return (
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        {Array.from({ length: 4 }).map((_, i) => (
+          <Card key={i}>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">
+                <Skeleton className="h-4 w-[100px]" />
+              </CardTitle>
+              <Skeleton className="h-4 w-4 rounded-full" />
+            </CardHeader>
+            <CardContent>
+              <Skeleton className="h-7 w-[60px] mb-1" />
+              <Skeleton className="h-4 w-[100px]" />
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+    )
+  }
 
-    fetchData()
-  }, [])
+  const stats = [
+    {
+      title: "Total Users",
+      value: overviewData?.totalUsers || 0,
+      icon: <Users className="h-4 w-4 text-muted-foreground" />,
+      description: "Total registered users",
+    },
+    {
+      title: "Active Users",
+      value: overviewData?.activeUsers || 0,
+      icon: <Users className="h-4 w-4 text-muted-foreground" />,
+      description: "Active in last 30 days",
+    },
+    {
+      title: "Completion Rate",
+      value: `${overviewData?.completionRate || 0}%`,
+      icon: <Award className="h-4 w-4 text-muted-foreground" />,
+      description: "Average course completion",
+    },
+    {
+      title: "Average Score",
+      value: overviewData?.averageScore || 0,
+      icon: <BarChart className="h-4 w-4 text-muted-foreground" />,
+      description: "Average assessment score",
+    },
+  ]
 
   return (
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-      <StatsCard
-        title="Total Users"
-        value={stats.totalUsers}
-        trend={stats.trends.totalUsers}
-        icon={<Users className="h-4 w-4" />}
-        loading={loading}
-      />
-      <StatsCard
-        title="Active Courses"
-        value={stats.activeCourses}
-        trend={stats.trends.activeCourses}
-        icon={<BookOpen className="h-4 w-4" />}
-        loading={loading}
-      />
-      <StatsCard
-        title="Completion Rate"
-        value={`${stats.completionRate}%`}
-        trend={stats.trends.completionRate}
-        icon={<Award className="h-4 w-4" />}
-        loading={loading}
-      />
-      <StatsCard
-        title="Compliance Status"
-        value={`${stats.complianceStatus}%`}
-        trend={stats.trends.complianceStatus}
-        icon={<ShieldCheck className="h-4 w-4" />}
-        loading={loading}
-      />
+      {stats.map((stat, index) => (
+        <Card key={index}>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">{stat.title}</CardTitle>
+            {stat.icon}
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{stat.value}</div>
+            <p className="text-xs text-muted-foreground">{stat.description}</p>
+          </CardContent>
+        </Card>
+      ))}
     </div>
-  )
-}
-
-function StatsCard({ title, value, trend, icon, loading }) {
-  return (
-    <Card>
-      <CardContent className="p-6">
-        <div className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <h3 className="tracking-tight text-sm font-medium">{title}</h3>
-          <div className="bg-muted p-2 rounded-full">{icon}</div>
-        </div>
-        {loading ? (
-          <div className="h-8 w-24 bg-muted animate-pulse rounded-md" />
-        ) : (
-          <div className="text-2xl font-bold">{value}</div>
-        )}
-        {loading ? (
-          <div className="h-4 w-32 bg-muted animate-pulse rounded-md mt-1" />
-        ) : (
-          <p className="text-xs text-muted-foreground flex items-center gap-1">
-            {trend > 0 ? (
-              <>
-                <ArrowUp className="h-3 w-3 text-green-500" />
-                <span className="text-green-500">{trend}%</span> from last month
-              </>
-            ) : (
-              <>
-                <ArrowDown className="h-3 w-3 text-red-500" />
-                <span className="text-red-500">{Math.abs(trend)}%</span> from last month
-              </>
-            )}
-          </p>
-        )}
-      </CardContent>
-    </Card>
   )
 }

@@ -1,40 +1,20 @@
 "use client"
-
-import { useState } from "react"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { PredictiveAnalytics } from "./predictive-analytics"
+import { DateRangePicker } from "@/components/analytics/date-range-picker"
+import { PredictiveAnalytics } from "@/components/analytics/predictive-analytics"
+import { AnomalyDetection } from "@/components/analytics/anomaly-detection"
 
 export function ForecastingTab() {
-  const [activeTab, setActiveTab] = useState("enrollment")
-
   return (
-    <Tabs defaultValue="enrollment" value={activeTab} onValueChange={setActiveTab}>
-      <TabsList className="grid w-full grid-cols-4">
-        <TabsTrigger value="enrollment">Enrollment</TabsTrigger>
-        <TabsTrigger value="completion">Completion</TabsTrigger>
-        <TabsTrigger value="engagement">Engagement</TabsTrigger>
-        <TabsTrigger value="compliance">Compliance</TabsTrigger>
-      </TabsList>
-      <TabsContent value="enrollment">
-        <div className="py-6">
-          <PredictiveAnalytics type="enrollment" />
-        </div>
-      </TabsContent>
-      <TabsContent value="completion">
-        <div className="py-6">
-          <PredictiveAnalytics type="completion" />
-        </div>
-      </TabsContent>
-      <TabsContent value="engagement">
-        <div className="py-6">
-          <PredictiveAnalytics type="engagement" />
-        </div>
-      </TabsContent>
-      <TabsContent value="compliance">
-        <div className="py-6">
-          <PredictiveAnalytics type="compliance" />
-        </div>
-      </TabsContent>
-    </Tabs>
+    <div className="space-y-6 p-6">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        <h1 className="text-3xl font-bold tracking-tight">Forecasting</h1>
+        <DateRangePicker />
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <PredictiveAnalytics />
+        <AnomalyDetection />
+      </div>
+    </div>
   )
 }

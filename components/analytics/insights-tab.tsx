@@ -1,29 +1,20 @@
 "use client"
-
-import { useState } from "react"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { AIInsights } from "./ai-insights"
-import { AnomalyDetection } from "./anomaly-detection"
+import { DateRangePicker } from "@/components/analytics/date-range-picker"
+import { TopInsights } from "@/components/analytics/top-insights"
+import { AIInsights } from "@/components/analytics/ai-insights"
 
 export function InsightsTab() {
-  const [activeTab, setActiveTab] = useState("ai-insights")
-
   return (
-    <Tabs defaultValue="ai-insights" value={activeTab} onValueChange={setActiveTab}>
-      <TabsList className="grid w-full grid-cols-2">
-        <TabsTrigger value="ai-insights">AI Insights</TabsTrigger>
-        <TabsTrigger value="anomaly-detection">Anomaly Detection</TabsTrigger>
-      </TabsList>
-      <TabsContent value="ai-insights">
-        <div className="py-6">
-          <AIInsights />
-        </div>
-      </TabsContent>
-      <TabsContent value="anomaly-detection">
-        <div className="py-6">
-          <AnomalyDetection />
-        </div>
-      </TabsContent>
-    </Tabs>
+    <div className="space-y-6 p-6">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        <h1 className="text-3xl font-bold tracking-tight">Insights</h1>
+        <DateRangePicker />
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <TopInsights />
+        <AIInsights />
+      </div>
+    </div>
   )
 }
