@@ -1,31 +1,54 @@
-![logo](https://github.com/user-attachments/assets/3fa4d185-6192-4372-8745-2a14546b2d0e)
-# Deekle.io
+# ![Deekle.io Logo](./public/logo.png)
 
-*Automatically synced with your [v0.dev](https://v0.dev) deployments*
+## Deekle.io  
+**Finally, compliance training that doesn’t suck.**
 
-[![Deployed on Vercel](https://img.shields.io/badge/Deployed%20on-Vercel-black?style=for-the-badge&logo=vercel)](https://vercel.com/john-s-projects-8ec564d7/v0-deekle-io)
-[![Built with v0](https://img.shields.io/badge/Built%20with-v0.dev-black?style=for-the-badge)](https://v0.dev/chat/projects/vdZ4eGQxY0g)
+Deekle.io is a bold, AI-powered LMS designed for compliance-heavy industries. We make training efficient, elegant, and *barely painful*.
 
-## Overview
+---
 
-This repository will stay in sync with your deployed chats on [v0.dev](https://v0.dev).
-Any changes you make to your deployed app will be automatically pushed to this repository from [v0.dev](https://v0.dev).
+### ✨ Features
+- **Beautiful new UI** built with Tailwind CSS + Next.js
+- **AI-Powered Study Generator** — notes, quizzes, summaries, flashcards
+- **Real-time Compliance Dashboard** — with expiring cert alerts and exportable reports
+- **Sleek Authentication Pages** — Login & Signup with modern UX
+- **Modular Dashboard Layout** with sidebar navigation
+- **Purple + Electric Blue color scheme** for extra boldness
 
-## Deployment
+---
 
-Your project is live at:
+### 🚀 Getting Started
 
-**[https://vercel.com/john-s-projects-8ec564d7/v0-deekle-io](https://vercel.com/john-s-projects-8ec564d7/v0-deekle-io)**
+```bash
+# Install dependencies
+pnpm install
 
-## Build your app
+# Run the app locally
+pnpm dev
+```
 
-Continue building your app on:
+---
 
-**[https://v0.dev/chat/projects/vdZ4eGQxY0g](https://v0.dev/chat/projects/vdZ4eGQxY0g)**
+### 🧠 Tech Stack
+- **Next.js (App Router)**
+- **Tailwind CSS**
+- **TypeScript**
+- **Lucide Icons**
+- **Modular Component Design**
 
-## How It Works
+---
 
-1. Create and modify your project using [v0.dev](https://v0.dev)
-2. Deploy your chats from the v0 interface
-3. Changes are automatically pushed to this repository
-4. Vercel deploys the latest version from this repository
+### 📁 Folder Structure Highlights
+
+- `app/login/page.tsx` – Redesigned login page
+- `app/signup/page.tsx` – Redesigned signup page
+- `app/dashboard/layout.tsx` – New sidebar layout
+- `app/dashboard/compliance/page.tsx` – Compliance dashboard
+- `app/dashboard/study-generator/page.tsx` – Study material AI
+
+---
+
+### ⚠️ License
+This project is under active development. Don't steal it. Or do, but at least be cool about it.
+
+---
