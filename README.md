@@ -1,3 +1,4 @@
+![logo](https://github.com/user-attachments/assets/3fa4d185-6192-4372-8745-2a14546b2d0e)
 # Deekle.io
 
 *Automatically synced with your [v0.dev](https://v0.dev) deployments*
